@@ -34,12 +34,14 @@ export default function Home() {
               />
             </div>
             <div className="flex-1">
+              <label>From</label>
               <Dropdown />
             </div>
             <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9">
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1">
+              <label>To</label>
               <Dropdown />
             </div>
           </div>

@@ -1,16 +1,25 @@
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Dropdown = () => {
   const [isOpen, setOpen] = useState();
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setOpen((prev) => !prev);
   };
+  const closeDropDown = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+      setOpen(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", closeDropDown);
+    return () => document.removeEventListener("mousedown", closeDropDown);
+  }, []);
 
   return (
-    <div className="relative">
-      <label>To</label>
+    <div className="relative" ref={dropdownRef}>
       <div
         className="border border-[#e6e6e6] rounded-[5px] p-1 w-full shadow-sm flex justify-between"
         onClick={toggleDropdown}
@@ -19,12 +28,12 @@ const Dropdown = () => {
         <KeyboardArrowDownOutlinedIcon sx={{ color: "#6c6e77" }} />
       </div>
       {isOpen && (
-        <ul className="absolute w-full bg-white border border-[#e6e6e6] border-t-0 rounded-[5px] p-1">
-          <li>option</li>
-          <li>option</li>
-          <li>option</li>
-          <li>option</li>
-          <li>option</li>
+        <ul className="absolute w-full bg-white border border-[#e6e6e6] border-t-0 rounded-[5px]">
+          <li className="p-1 hover:bg-[#f4f5f6]">option</li>
+          <li className="p-1 hover:bg-[#f4f5f6]">option</li>
+          <li className="p-1 hover:bg-[#f4f5f6]">option</li>
+          <li className="p-1 hover:bg-[#f4f5f6]">option</li>
+          <li className="p-1 hover:bg-[#f4f5f6]">option</li>
         </ul>
       )}
     </div>
