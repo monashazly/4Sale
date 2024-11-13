@@ -23,7 +23,7 @@ export default function Home() {
         </h1>
         <div className=" bg-white rounded-3xl min-w-[80%] mx-auto min-h-80 shadow-lg p-16">
           <div className="flex md:justify-between md:flex-row flex-col gap-4 items-end">
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <label>Amount</label>
               <input
                 type="number"
@@ -33,14 +33,14 @@ export default function Home() {
                 placeholder="0.0"
               />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <label>From</label>
-              <Dropdown />
+              <Dropdown className=""/>
             </div>
-            <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9">
+            <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto">
               <SwapHorizOutlinedIcon color="primary" />
             </button>
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <label>To</label>
               <Dropdown />
             </div>
