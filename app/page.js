@@ -51,7 +51,13 @@ export default function Home() {
   const reset = () => {
     dispatch(setToCurrency(null));
     dispatch(setFromCurrency(null));
-    setAmount(1)
+    setAmount(1);
+  };
+
+  //  swap values
+  const swap = () => {
+    dispatch(setFromCurrency(toCurrency));
+    dispatch(setToCurrency(fromCurrency));
   };
 
   const exchange = () => {
@@ -93,7 +99,7 @@ export default function Home() {
                 }
               />
             </div>
-            <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto">
+            <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto" onClick={swap}>
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1 w-full">
