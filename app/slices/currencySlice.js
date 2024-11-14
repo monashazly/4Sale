@@ -3,8 +3,7 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 export const fetchCurrencies = createAsyncThunk(
   "currency/fetchCurrencies",
   async ({ url, options }) => {
-    console.log("hi" , url);
-
+    
     try {
       const response = await fetch(url, options);
       if (!response.ok) {

@@ -2,10 +2,9 @@ import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDown
 import { useEffect, useRef, useState } from "react";
 
 const Dropdown = ({ currencies, selectedCurrency, onValueChange }) => {
+    
   const [isOpen, setOpen] = useState();
   const dropdownRef = useRef(null);
-
-  console.log("currensjnaldkncies", currencies);
 
   const toggleDropdown = () => {
     setOpen((prev) => !prev);
