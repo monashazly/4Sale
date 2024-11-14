@@ -20,9 +20,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>
-          Currency Exchange
-        </title>
+        <title>Currency Exchange</title>
+        <head>
+          <title>Currency Exchange</title>
+          <link rel="preload" as="image" href="/image.png" type="image/png" />
+        </head>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
