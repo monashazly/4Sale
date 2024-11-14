@@ -164,14 +164,14 @@ export default function Home() {
             </div>
           </div>
           {fromCurrency && toCurrency && amount && (
-            <div>
+            <>
               <button
-                className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
+                className=" w-100 bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
                 onClick={reset}
               >
                 Reset
               </button>
-              <div className="mt-2 flex justify-center gap-2  items-center text-[#40618a] font-bold">
+              <div className="mt-5 flex justify-start md:justify-center gap-2  items-center text-[#40618a] font-bold">
                 {exchangeRates[fromCurrency] && !pending && (
                   <>
                     <span className="text-2xl">
@@ -186,7 +186,7 @@ export default function Home() {
                   </>
                 )}
               </div>
-            </div>
+            </>
           )}
           {pending && (
             <div className=" mx-auto w-9 h-9 border-4 border-t-[#40618a] rounded-full animate-spin mt-5 "></div>
