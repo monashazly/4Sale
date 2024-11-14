@@ -27,7 +27,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(fetchCurrencies({ url, options }));
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
@@ -49,20 +49,14 @@ export default function Home() {
             </div>
             <div className="flex-1 w-full">
               <label>From</label>
-              <Dropdown
-                currencies={currencies}
-                ref={fromRef}
-              />
+              <Dropdown currencies={currencies} ref={fromRef} />
             </div>
             <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto">
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1 w-full">
               <label>To</label>
-              <Dropdown
-                currencies={currencies}
-                ref={toRef}
-              />
+              <Dropdown currencies={currencies} ref={toRef} />
             </div>
           </div>
           <button
