@@ -59,15 +59,24 @@ export default function Home() {
     dispatch(setFromCurrency(toCurrency));
     dispatch(setToCurrency(fromCurrency));
   };
+  //  exchange
 
-  const exchange = () => {
-    dispatch(
-      exchangeCurrency(
-        `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency}.json`,
-        options
-      )
-    );
-  };
+  useEffect(() => {
+    if (
+      fromCurrency &&
+      toCurrency &&
+      amount &&
+      !isNaN(amount) &&
+      Number(amount) > 0
+    ) {
+      dispatch(
+        exchangeCurrency(
+          `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency}.json`,
+          options
+        )
+      );
+    }
+  }, [fromCurrency, toCurrency, amount, dispatch]);
 
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
@@ -99,7 +108,10 @@ export default function Home() {
                 }
               />
             </div>
-            <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto" onClick={swap}>
+            <button
+              className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto"
+              onClick={swap}
+            >
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1 w-full">
@@ -119,15 +131,19 @@ export default function Home() {
               Reset
             </button>
           )}
-
-          <button onClick={exchange}>Exhchange</button>
-          <div>
-            exchange ::::
-            {exchangeRates[fromCurrency] &&
-              amount * exchangeRates[fromCurrency][toCurrency]}
+          <div className="mt-2 flex justify-start gap-2">
+            <span>
+              {exchangeRates[fromCurrency] &&
+                parseFloat(
+                  amount * exchangeRates[fromCurrency][toCurrency]
+                ).toFixed(2)}
+            </span>
+            <span> {toCurrency?.toUpperCase()}</span>
           </div>
+          {pending && (
+            <div className=" mx-auto w-9 h-9 border-4 border-t-[#40618a] rounded-full animate-spin "></div>
+          )}
         </div>
-        {pending && <h1>loading .....</h1>}
       </div>
     </div>
   );
