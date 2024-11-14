@@ -50,7 +50,10 @@ export default function Home() {
   }, [currencies, fromCurrency]);
 
   //  reset values
-  const reset = () => {};
+  const reset = () => {
+    dispatch(setToCurrency(null));
+    dispatch(setFromCurrency(null));
+  };
 
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
@@ -92,12 +95,14 @@ export default function Home() {
               />
             </div>
           </div>
-          <button
-            className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
-            onClick={reset}
-          >
-            Reset
-          </button>
+          {fromCurrency && toCurrency && (
+            <button
+              className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
+              onClick={reset}
+            >
+              Reset
+            </button>
+          )}
         </div>
         {pending && <h1>loading .....</h1>}
       </div>
