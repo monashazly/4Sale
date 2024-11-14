@@ -2,7 +2,7 @@
 
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import Dropdown from "./components/Dropdown";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrencies } from "./slices/currencySlice";
 import { setFromCurrency, setToCurrency } from "./slices/currencySlice";
@@ -15,16 +15,42 @@ const options = {
 
 export default function Home() {
   const dispatch = useDispatch();
+
   const { currencies, pending, fromCurrency, toCurrency } = useSelector(
     (state) => state.currency
   );
 
-  //  reset values
-  const reset = () => {};
+  console.log("currencies", currencies);
 
+  //  fetch currencies
   useEffect(() => {
     dispatch(fetchCurrencies({ url, options }));
   }, [dispatch]);
+
+  //  filter from currencies
+
+  const fromCurrencies = useMemo(() => {
+    return Object.keys(currencies).map((currency) => {
+      return {
+        currency,
+        disabled: currency === toCurrency ? true : false,
+      };
+    });
+  }, [currencies, toCurrency]);
+
+  //  filter to currencies
+
+  const toCurrencies = useMemo(() => {
+    return Object.keys(currencies).map((currency) => {
+      return {
+        currency,
+        disabled: currency === fromCurrency ? true : false,
+      };
+    });
+  }, [currencies, fromCurrency]);
+
+  //  reset values
+  const reset = () => {};
 
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
@@ -47,7 +73,7 @@ export default function Home() {
             <div className="flex-1 w-full">
               <label>From</label>
               <Dropdown
-                currencies={currencies}
+                currencies={fromCurrencies}
                 selectedCurrency={fromCurrency}
                 onValueChange={(currency) =>
                   dispatch(setFromCurrency(currency))
@@ -60,7 +86,7 @@ export default function Home() {
             <div className="flex-1 w-full">
               <label>To</label>
               <Dropdown
-                currencies={currencies}
+                currencies={toCurrencies}
                 selectedCurrency={toCurrency}
                 onValueChange={(currency) => dispatch(setToCurrency(currency))}
               />

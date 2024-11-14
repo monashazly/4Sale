@@ -5,6 +5,8 @@ const Dropdown = ({ currencies, selectedCurrency, onValueChange }) => {
   const [isOpen, setOpen] = useState();
   const dropdownRef = useRef(null);
 
+  console.log("currensjnaldkncies", currencies);
+
   const toggleDropdown = () => {
     setOpen((prev) => !prev);
   };
@@ -35,13 +37,16 @@ const Dropdown = ({ currencies, selectedCurrency, onValueChange }) => {
       </div>
       {isOpen && (
         <ul className="absolute w-full bg-white border border-[#e6e6e6] border-t-0 rounded-[5px] max-h-36 overflow-scroll z-50">
-          {Object.keys(currencies).map((currency) => (
-            <li className="p-2 hover:bg-[#f4f5f6]" key={currency}>
+          {currencies.map((currency) => (
+            <li key={currency.currency}>
               <button
-                className="w-full text-start"
-                onClick={() => handleChangeValue(currency)}
+                className={`w-full text-start h-full p-2 hover:bg-[#f4f5f6] ${
+                  currency.disabled ? "text-zinc-300" : "text-black"
+                }`}
+                onClick={() => handleChangeValue(currency.currency)}
+                disabled={currency.disabled}
               >
-                {currency}
+                {currency.currency}
               </button>
             </li>
           ))}
