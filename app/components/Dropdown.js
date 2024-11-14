@@ -1,10 +1,9 @@
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import { useEffect, useRef, useState } from "react";
 
-const Dropdown = ({ currencies }) => {
+const Dropdown = ({ currencies, selectedCurrency, onValueChange }) => {
   const [isOpen, setOpen] = useState();
   const dropdownRef = useRef(null);
-  const [selectedCurrency, setCurrency] = useState("USD");
 
   const toggleDropdown = () => {
     setOpen((prev) => !prev);
@@ -19,6 +18,12 @@ const Dropdown = ({ currencies }) => {
     return () => document.removeEventListener("mousedown", closeDropDown);
   }, []);
 
+  //   update the value
+
+  const handleChangeValue = (currency) => {
+    setOpen(false);
+    onValueChange(currency);
+  };
   return (
     <div className="relative" ref={dropdownRef}>
       <div
@@ -32,7 +37,12 @@ const Dropdown = ({ currencies }) => {
         <ul className="absolute w-full bg-white border border-[#e6e6e6] border-t-0 rounded-[5px] max-h-36 overflow-scroll z-50">
           {Object.keys(currencies).map((currency) => (
             <li className="p-2 hover:bg-[#f4f5f6]" key={currency}>
-              <button className="w-full text-start">{currency}</button>
+              <button
+                className="w-full text-start"
+                onClick={() => handleChangeValue(currency)}
+              >
+                {currency}
+              </button>
             </li>
           ))}
         </ul>

@@ -2,9 +2,10 @@
 
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import Dropdown from "./components/Dropdown";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrencies } from "./slices/currencySlice";
+import { setFromCurrency, setToCurrency } from "./slices/currencySlice";
 
 const url =
   "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json";
@@ -14,16 +15,12 @@ const options = {
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { currencies, pending } = useSelector((state) => state.currency);
-
-  const toRef = useRef();
-  const fromRef = useRef();
+  const { currencies, pending, fromCurrency, toCurrency } = useSelector(
+    (state) => state.currency
+  );
 
   //  reset values
-  const reset = () => {
-    toRef.current.setCurrency(null);
-    fromRef.current.setCurrency(null);
-  };
+  const reset = () => {};
 
   useEffect(() => {
     dispatch(fetchCurrencies({ url, options }));
@@ -49,14 +46,24 @@ export default function Home() {
             </div>
             <div className="flex-1 w-full">
               <label>From</label>
-              <Dropdown currencies={currencies} ref={fromRef} />
+              <Dropdown
+                currencies={currencies}
+                selectedCurrency={fromCurrency}
+                onValueChange={(currency) =>
+                  dispatch(setFromCurrency(currency))
+                }
+              />
             </div>
             <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto">
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1 w-full">
               <label>To</label>
-              <Dropdown currencies={currencies} ref={toRef} />
+              <Dropdown
+                currencies={currencies}
+                selectedCurrency={toCurrency}
+                onValueChange={(currency) => dispatch(setToCurrency(currency))}
+              />
             </div>
           </div>
           <button

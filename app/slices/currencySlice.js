@@ -29,6 +29,8 @@ const currencySlice = createSlice({
   },
   reducers: {
     setFromCurrency: (state, action) => {
+        console.log('slice');
+        
       state.fromCurrency = action.payload;
     },
     setToCurrency: (state, action) => {
