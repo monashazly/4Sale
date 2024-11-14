@@ -1,5 +1,9 @@
+"use client";
+
 import localFont from "next/font/local";
 import "./globals.css";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -12,18 +16,13 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata = {
-  title: "Currency Exchange",
-  description: "currency exchange app",
-};
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Provider store={store}>{children}</Provider>
       </body>
     </html>
   );

@@ -1,9 +1,10 @@
 "use client";
 
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
-import useFetch from "@/hooks/useFetch";
 import Dropdown from "./components/Dropdown";
 import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCurrencies } from "./slices/currencySlice";
 
 const url =
   "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json";
@@ -12,26 +13,21 @@ const options = {
 };
 
 export default function Home() {
-  const { data, pending } = useFetch(url, options);
+  const dispatch = useDispatch();
+  const { currencies, pending } = useSelector((state) => state.currency);
+
   const toRef = useRef();
   const fromRef = useRef();
-
-  useEffect(() => {
-    console.log(
-      "toRef.current.selectedCurrency",
-      toRef.current?.selectedCurrency
-    );
-    console.log(
-      "fromRef.current.selectedCurrency",
-      fromRef.current?.selectedCurrency
-    );
-  }, [toRef.current?.selectedCurrency, fromRef.current?.selectedCurrency]);
 
   //  reset values
   const reset = () => {
     toRef.current.setCurrency(null);
     fromRef.current.setCurrency(null);
   };
+
+  useEffect(() => {
+    dispatch(fetchCurrencies({ url, options }));
+  }, []);
 
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
@@ -53,14 +49,20 @@ export default function Home() {
             </div>
             <div className="flex-1 w-full">
               <label>From</label>
-              <Dropdown currencies={data} ref={fromRef} />
+              <Dropdown
+                currencies={currencies}
+                ref={fromRef}
+              />
             </div>
             <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto">
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1 w-full">
               <label>To</label>
-              <Dropdown currencies={data} ref={toRef} />
+              <Dropdown
+                currencies={currencies}
+                ref={toRef}
+              />
             </div>
           </div>
           <button

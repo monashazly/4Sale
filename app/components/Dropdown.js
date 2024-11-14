@@ -7,7 +7,7 @@ import {
   forwardRef,
 } from "react";
 
-const Dropdown = forwardRef(({ currencies }, ref) => {
+const Dropdown = forwardRef(({ currencies, onValueChange }, ref) => {
   const [isOpen, setOpen] = useState();
   const dropdownRef = useRef(null);
   const [selectedCurrency, setCurrency] = useState("USD");
@@ -25,9 +25,14 @@ const Dropdown = forwardRef(({ currencies }, ref) => {
     return () => document.removeEventListener("mousedown", closeDropDown);
   }, []);
 
+  //    change currency
+  const changeCurrency = (currency) => {
+    // setCurrency(currency)
+    onValueChange()
+  };
   useImperativeHandle(ref, () => ({
     selectedCurrency,
-    setCurrency
+    setCurrency,
   }));
 
   return (
@@ -45,7 +50,7 @@ const Dropdown = forwardRef(({ currencies }, ref) => {
             <li className="p-2 hover:bg-[#f4f5f6]" key={currency}>
               <button
                 className="w-full text-start"
-                onClick={() => setCurrency(currency)}
+                onClick={() => changeCurrency(currency)}
               >
                 {currency}
               </button>
