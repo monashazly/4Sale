@@ -3,18 +3,36 @@
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import useFetch from "@/hooks/useFetch";
 import Dropdown from "./components/Dropdown";
+import { useEffect, useRef } from "react";
 
-const url = "https://currency-exchange.p.rapidapi.com/listquotes";
+const url =
+  "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json";
 const options = {
   method: "GET",
-  headers: {
-    "x-rapidapi-key": "60e8bd664emsh7f403961699b4abp158776jsna9ca2e98cfdc",
-    "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
-  },
 };
 
 export default function Home() {
   const { data, pending } = useFetch(url, options);
+  const toRef = useRef();
+  const fromRef = useRef();
+
+  useEffect(() => {
+    console.log(
+      "toRef.current.selectedCurrency",
+      toRef.current?.selectedCurrency
+    );
+    console.log(
+      "fromRef.current.selectedCurrency",
+      fromRef.current?.selectedCurrency
+    );
+  }, [toRef.current?.selectedCurrency, fromRef.current?.selectedCurrency]);
+
+  //  reset values
+  const reset = () => {
+    toRef.current.setCurrency(null);
+    fromRef.current.setCurrency(null);
+  };
+
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
       <div className="bg-[#40618a] h-full bg-opacity-[0.7] backdrop-blur-sm flex flex-col gap-8">
@@ -35,17 +53,20 @@ export default function Home() {
             </div>
             <div className="flex-1 w-full">
               <label>From</label>
-              <Dropdown className=""/>
+              <Dropdown currencies={data} ref={fromRef} />
             </div>
             <button className="flex-shrink rounded-full border border-[#e6e6e6] w-9 h-9 mx-auto">
               <SwapHorizOutlinedIcon color="primary" />
             </button>
             <div className="flex-1 w-full">
               <label>To</label>
-              <Dropdown />
+              <Dropdown currencies={data} ref={toRef} />
             </div>
           </div>
-          <button className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full">
+          <button
+            className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
+            onClick={reset}
+          >
             Reset
           </button>
         </div>

@@ -13,8 +13,8 @@ const useFetch = (url, options) => {
         const response = await fetch(url, options);
         const result = await response.text();
 
-        setData(result);
-        console.log("result", result);
+        setData(JSON.parse(result));
+        // console.log("result", result);
       } catch (error) {
         setError(error);
       } finally {
