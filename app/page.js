@@ -26,6 +26,7 @@ export default function Home() {
     useSelector((state) => state.currency);
 
   //  fetch currencies
+  
   useEffect(() => {
     dispatch(fetchCurrencies({ url, options }));
   }, [dispatch]);
