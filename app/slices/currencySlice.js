@@ -3,7 +3,21 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 export const fetchCurrencies = createAsyncThunk(
   "currency/fetchCurrencies",
   async ({ url, options }) => {
-    
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("error:", error);
+    }
+  }
+);
+export const exchangeCurrency = createAsyncThunk(
+  "currency/exchangeCurrency",
+  async (url, options) => {
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
@@ -22,12 +36,13 @@ const currencySlice = createSlice({
   initialState: {
     toCurrency: null,
     fromCurrency: null,
-    currencies: [],
+    currencies: {},
+    exchangeRates: {},
     pending: false,
     error: null,
   },
   reducers: {
-    setFromCurrency: (state, action) => {      
+    setFromCurrency: (state, action) => {
       state.fromCurrency = action.payload;
     },
     setToCurrency: (state, action) => {
@@ -35,6 +50,7 @@ const currencySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // handle fetch
     builder
       .addCase(fetchCurrencies.pending, (state) => {
         state.pending = true;
@@ -45,6 +61,20 @@ const currencySlice = createSlice({
         state.currencies = action.payload;
       })
       .addCase(fetchCurrencies.rejected, (state, action) => {
+        state.pending = false;
+        state.error = action.error;
+      });
+    //   handle exchange
+    builder
+      .addCase(exchangeCurrency.pending, (state) => {
+        state.pending = true;
+        state.error = null;
+      })
+      .addCase(exchangeCurrency.fulfilled, (state, action) => {
+        state.pending = false;
+        state.exchangeRates = action.payload;
+      })
+      .addCase(exchangeCurrency.rejected, (state, action) => {
         state.pending = false;
         state.error = action.error;
       });

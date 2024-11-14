@@ -2,9 +2,9 @@
 
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import Dropdown from "./components/Dropdown";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCurrencies } from "./slices/currencySlice";
+import { fetchCurrencies, exchangeCurrency } from "./slices/currencySlice";
 import { setFromCurrency, setToCurrency } from "./slices/currencySlice";
 
 const url =
@@ -15,12 +15,10 @@ const options = {
 
 export default function Home() {
   const dispatch = useDispatch();
+  const [amount, setAmount] = useState(1.0);
 
-  const { currencies, pending, fromCurrency, toCurrency } = useSelector(
-    (state) => state.currency
-  );
-
-  console.log("currencies", currencies);
+  const { currencies, pending, fromCurrency, toCurrency, exchangeRates } =
+    useSelector((state) => state.currency);
 
   //  fetch currencies
   useEffect(() => {
@@ -53,6 +51,16 @@ export default function Home() {
   const reset = () => {
     dispatch(setToCurrency(null));
     dispatch(setFromCurrency(null));
+    setAmount(1)
+  };
+
+  const exchange = () => {
+    dispatch(
+      exchangeCurrency(
+        `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency}.json`,
+        options
+      )
+    );
   };
 
   return (
@@ -71,6 +79,8 @@ export default function Home() {
                 min="0.0"
                 className="border border-[#e6e6e6] rounded-[5px] p-1 w-full shadow-sm"
                 placeholder="0.0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
               />
             </div>
             <div className="flex-1 w-full">
@@ -103,6 +113,13 @@ export default function Home() {
               Reset
             </button>
           )}
+
+          <button onClick={exchange}>Exhchange</button>
+          <div>
+            exchange ::::
+            {exchangeRates[fromCurrency] &&
+              amount * exchangeRates[fromCurrency][toCurrency]}
+          </div>
         </div>
         {pending && <h1>loading .....</h1>}
       </div>
