@@ -5,7 +5,12 @@ import Dropdown from "./components/Dropdown";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrencies, exchangeCurrency } from "./slices/currencySlice";
-import { setFromCurrency, setToCurrency } from "./slices/currencySlice";
+import {
+  setFromCurrency,
+  setToCurrency,
+  setPending,
+} from "./slices/currencySlice";
+import debounce from "lodash/debounce";
 
 const url =
   "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json";
@@ -48,6 +53,7 @@ export default function Home() {
   }, [currencies, fromCurrency]);
 
   //  reset values
+
   const reset = () => {
     dispatch(setToCurrency(null));
     dispatch(setFromCurrency(null));
@@ -55,18 +61,23 @@ export default function Home() {
   };
 
   //  swap values
+
   const swap = () => {
     dispatch(setFromCurrency(toCurrency));
     dispatch(setToCurrency(fromCurrency));
   };
-  //  exchange
 
-  useEffect(() => {
+  //  exchange with debounce
+
+  const handleChangeAmount = (e) => {
+    setAmount(e.target.value);
+  };
+
+  const dispatchExchangeRate = () => {
     if (
       fromCurrency &&
       toCurrency &&
       amount &&
-      !isNaN(amount) &&
       Number(amount) > 0
     ) {
       dispatch(
@@ -76,7 +87,35 @@ export default function Home() {
         )
       );
     }
-  }, [fromCurrency, toCurrency, amount, dispatch]);
+  };
+
+  const debouncedExchangeRate = debounce(dispatchExchangeRate, 2000);
+
+  useEffect(() => {
+    if (
+      fromCurrency &&
+      toCurrency &&
+      amount &&
+      Number(amount) > 0
+    ) {
+      dispatchExchangeRate();
+    }
+  }, [fromCurrency, toCurrency]);
+
+  useEffect(() => {
+    if (
+      fromCurrency &&
+      toCurrency &&
+      amount &&
+      Number(amount) > 0
+    ) {
+      dispatch(setPending(true));
+      debouncedExchangeRate();
+    }
+    return () => {      
+      debouncedExchangeRate.cancel();
+    };
+  }, [amount]);
 
   return (
     <div className="bg-[url('/image.png')] bg-cover h-screen">
@@ -95,7 +134,7 @@ export default function Home() {
                 className="border border-[#e6e6e6] rounded-[5px] p-1 w-full shadow-sm"
                 placeholder="0.0"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={handleChangeAmount}
               />
             </div>
             <div className="flex-1 w-full">
@@ -123,25 +162,33 @@ export default function Home() {
               />
             </div>
           </div>
-          {fromCurrency && toCurrency && (
-            <button
-              className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
-              onClick={reset}
-            >
-              Reset
-            </button>
+          {fromCurrency && toCurrency && amount && (
+            <div>
+              <button
+                className="bg-[#38609b] text-white mt-5 px-10 py-1 rounded-full"
+                onClick={reset}
+              >
+                Reset
+              </button>
+              <div className="mt-2 flex justify-center gap-2  items-center text-[#40618a] font-bold">
+                {exchangeRates[fromCurrency] && !pending && (
+                  <>
+                    <span className="text-2xl">
+                      {parseFloat(
+                        amount * exchangeRates[fromCurrency][toCurrency]
+                      ).toFixed(2)}
+                    </span>
+                    <span className="text-xs text-black">
+                      {" "}
+                      {toCurrency?.toUpperCase()}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
           )}
-          <div className="mt-2 flex justify-start gap-2">
-            <span>
-              {exchangeRates[fromCurrency] &&
-                parseFloat(
-                  amount * exchangeRates[fromCurrency][toCurrency]
-                ).toFixed(2)}
-            </span>
-            <span> {toCurrency?.toUpperCase()}</span>
-          </div>
           {pending && (
-            <div className=" mx-auto w-9 h-9 border-4 border-t-[#40618a] rounded-full animate-spin "></div>
+            <div className=" mx-auto w-9 h-9 border-4 border-t-[#40618a] rounded-full animate-spin mt-5 "></div>
           )}
         </div>
       </div>

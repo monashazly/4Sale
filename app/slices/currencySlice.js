@@ -48,6 +48,9 @@ const currencySlice = createSlice({
     setToCurrency: (state, action) => {
       state.toCurrency = action.payload;
     },
+    setPending: (state) => {
+      state.pending = true;
+    },
   },
   extraReducers: (builder) => {
     // handle fetch
@@ -81,5 +84,5 @@ const currencySlice = createSlice({
   },
 });
 
-export const { setFromCurrency, setToCurrency } = currencySlice.actions;
+export const { setFromCurrency, setToCurrency , setPending } = currencySlice.actions;
 export default currencySlice.reducer;
