@@ -126,7 +126,7 @@ export default function Home() {
         <h1 className="text-white text-3xl font-extrabold text-center mt-28">
           Money Exchange
         </h1>
-        <div className=" bg-white rounded-3xl min-w-[80%] mx-auto min-h-80 shadow-lg p-16">
+        <div className=" bg-white text-black rounded-3xl min-w-[80%] mx-auto min-h-80 shadow-lg p-16">
           <div className="flex md:justify-between md:flex-row flex-col gap-4 items-end">
             <div className="flex-1 w-full">
               <label>Amount</label>
@@ -173,15 +173,15 @@ export default function Home() {
               >
                 Reset
               </button>
-              <div className="mt-2 flex justify-center gap-2  items-center text-[#40618a] font-bold">
+              <div className="mt-2 flex justify-center gap-2  items-center  font-bold">
                 {exchangeRates[fromCurrency] && !pending && (
                   <>
-                    <span className="text-2xl">
+                    <span className="text-2xl text-[#40618a]">
                       {parseFloat(
                         amount * exchangeRates[fromCurrency][toCurrency]
                       ).toFixed(2)}
                     </span>
-                    <span className="text-xs text-black">
+                    <span className="text-xs">
                       {" "}
                       {toCurrency?.toUpperCase()}
                     </span>
