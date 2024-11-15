@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import Dropdown from "../app/components/Dropdown";
+import Dropdown from "@/app/components/Dropdown";
 const mockCurrencies = [
   { currency: "USD", disabled: false },
   { currency: "EUR", disabled: false },
