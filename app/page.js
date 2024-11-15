@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import SwapHorizOutlinedIcon from "@mui/icons-material/SwapHorizOutlined";
 import Dropdown from "./components/Dropdown";
 import { useEffect, useMemo, useState } from "react";
